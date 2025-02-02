@@ -150,6 +150,7 @@ class Tree {
     );
   }
   rebalance() {
+    // The traversal method doesn't really matter you can use any of the four
     const array = this.inOrder((n) => n + 0);
     this.buildTree(array);
   }
