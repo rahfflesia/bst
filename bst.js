@@ -65,21 +65,25 @@ class Tree {
       }
       let currentNode = queue.shift();
       currentNode.data = callback(currentNode.data);
+      console.log(currentNode);
     }
   }
   inOrder(callback) {
     if (typeof callback !== "function") Warning.showError();
     let stack = [];
+    let arr = [];
     let currentNode = this.root;
     while (currentNode !== null || stack.length !== 0) {
       while (currentNode !== null) {
         stack.push(currentNode);
+        arr.push(currentNode.data);
         currentNode = currentNode.left;
       }
       currentNode = stack.pop();
       currentNode.data = callback(currentNode.data);
       currentNode = currentNode.right;
     }
+    return arr;
   }
   preOrder(callback) {
     if (typeof callback !== "function") Warning.showError();
@@ -145,7 +149,10 @@ class Tree {
         Math.abs(this.height(root.left) - this.height(root.right)) <= 1)
     );
   }
-  rebalance() {}
+  rebalance() {
+    const array = this.inOrder((n) => n + 0);
+    this.buildTree(array);
+  }
 }
 
 class Node {
@@ -185,7 +192,25 @@ class List {
   }
 }
 
-const tree = new Tree([1, 2, 3, 4, 5, 6, 11, 20]);
+// Unbalanced tree
+const secondTree = new Tree([1]);
+secondTree.buildTree();
+secondTree.root.left = new Node(2);
+secondTree.root.left.left = new Node(3);
+secondTree.root.left.left.left = new Node(5);
+secondTree.root.left.left.left.left = new Node(6);
+secondTree.root.right = new Node(7);
+secondTree.prettyPrint();
+console.log(secondTree.isBalanced());
+
+// Rebalanced tree
+const tree = new Tree([1]);
 tree.buildTree();
-console.log(tree.isBalanced());
+tree.root.left = new Node(2);
+tree.root.left.left = new Node(3);
+tree.root.left.left.left = new Node(5);
+tree.root.left.left.left.left = new Node(6);
+tree.root.right = new Node(7);
+tree.rebalance();
 tree.prettyPrint();
+console.log(tree.isBalanced());
