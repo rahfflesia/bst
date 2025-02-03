@@ -32,7 +32,29 @@ class Tree {
     if (value > node.data) node.right = this.insert(value, node.right);
     return node;
   }
-  delete(value, node = this.root) {}
+  delete(value, node = this.root) {
+    if (!node) {
+      return node;
+    }
+    if (value < node.data) {
+      node.left = this.delete(value, node.left);
+    } else if (value > node.data) {
+      node.right = this.delete(value, node.right);
+    } else {
+      if (node.left === null) {
+        return node.right;
+      } else if (node.right === null) {
+        return node.left;
+      }
+      let curr = node.right;
+      while (curr.left) {
+        curr = curr.left;
+      }
+      node.data = curr.data;
+      node.right = this.delete(curr.data, node.right);
+    }
+    return node;
+  }
   find(value) {
     let queue = [this.root];
     while (queue.length !== 0) {
